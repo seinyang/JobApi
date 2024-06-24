@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.api.mapper.Mapper">
+    <select id="findAll" resultType="com.example.api.dto.Job">
+        SELECT id,content,time,result FROM joblist;
+    </select>
+    <select id="findListId" resultType="com.example.api.dto.Job">
+        SELECT id,content,time,result FROM joblist WHERE id=#{id};
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.api.dto.User">
+        INSERT INTO users (name, email,id, password, sns)
+        VALUES (#{name}, #{email}, #{id}, #{password}, #{sns})
+    </insert>
+
+    <select id="findUserById" parameterType="java.util.Map" resultType="com.example.api.dto.User">
+        SELECT * FROM info WHERE id = #{id}
+    </select>
+</mapper>
