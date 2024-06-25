@@ -31,12 +31,7 @@ public class JobService {
     }
 
     public User authenticateUser(String id, String password) {
-        User user = mapper.findUserById(id);
 
-        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-            return user;  // 인증 성공 시 사용자 정보 반환
-        }
-
-        return null;  // 인증 실패 시 null 반환
+        return mapper.findUserByIdAndPassword(id,password);
     }
 }

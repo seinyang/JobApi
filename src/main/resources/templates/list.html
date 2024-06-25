@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job List by ID</title>
+</head>
+
+<body>
+<h1>Welcome to the List Page </h1>
+<p id="result"></p>
+<script src="/auth.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Retrieve user information from localStorage
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = localStorage.getItem('token');
+        console.log("token:"+token)
+        if (user&& token) {
+            document.getElementById('result').textContent = `Name: ${user.name}, Email: ${user.email}`;
+
+        } else {
+            window.location.href = '/login';
+        }
+    });
+</script>
+
+<h1>Job List by ID</h1>
+<label for="jobIdInput">Enter Job ID:</label>
+<input type="number" id="jobIdInput" name="jobId">
+<button id="fetchButton">Fetch Job</button>
+<ul id="jobList"></ul>
+
+<h2>All Jobs List</h2>
+<ul id="jobListAll"></ul>
+
+
+
+<script>
+    async function fetchJobById() {
+        try {
+            const jobId = document.getElementById('jobIdInput').value; // 입력된 아이디 값 가져오기
+            const response = await fetch(`http://localhost:8080/api/jobs/listId?id=${jobId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const job = await response.json();
+            const jobListElement = document.getElementById('jobList');
+            jobListElement.innerHTML = ''; // 이전에 있던 내용 초기화
+            if (job.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = '해당 ID에 대한 작업이 없습니다.';
+                jobListElement.appendChild(li);
+            } else {
+                job.forEach(job => {
+                    const li = document.createElement('li');
+
+                    // Create checkbox element
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.disabled = true; // Disable checkbox (read-only)
+
+                    // Set checkbox checked state based on job.result
+                    checkbox.checked = job.result;
+
+                    li.textContent = `ID: ${job.id}, Content: ${job.content}, Time: ${job.time}`;
+                    li.appendChild(checkbox);
+                    jobListElement.appendChild(li);
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching job list by ID:', error);
+        }
+    }
+
+    async function fetchAllJobs() {
+        try {
+            const token = localStorage.getItem('token'); // 토큰 가져오기
+
+            const response = await fetch('http://localhost:8080/api/jobs/listAll',{
+                headers:{
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const jobs = await response.json();
+            const jobListElement = document.getElementById('jobListAll');
+            jobListElement.innerHTML = ''; // Clear previous content
+
+            jobs.forEach(job => {
+                const li = document.createElement('li');
+
+                // Create checkbox element
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.disabled = true; // Disable checkbox (read-only)
+
+                // Set checkbox checked state based on job.result
+                checkbox.checked = job.result;
+
+                li.textContent = `ID: ${job.id}, Content: ${job.content}, Time: ${job.time}`;
+                li.appendChild(checkbox);
+                jobListElement.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching all job list:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchAllJobs(); // 페이지 로드 시 전체 작업 목록을 표시
+
+        const fetchButton = document.getElementById('fetchButton');
+        fetchButton.addEventListener('click', fetchJobById);
+    });
+</script>
+</body>
+</html>

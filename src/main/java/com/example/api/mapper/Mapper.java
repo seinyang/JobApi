@@ -16,8 +16,7 @@ public interface Mapper {
 
     void insertUser(User user);
 
+    User findUserByIdAndPassword(@Param("id") String id,@Param("password")String password);
 
-
-    User findUserById(@Param("id") String id);
 
 }

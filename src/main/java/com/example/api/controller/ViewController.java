@@ -7,9 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 
 
-    @GetMapping("/")
-    public String list(){
+    @GetMapping("/login")
+    public String login(){
         return "index";
     }
+
+    @GetMapping("/list")
+    public String list(){
+        return "list";
+    }
+
 
 }

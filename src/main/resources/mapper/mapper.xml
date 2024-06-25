@@ -12,11 +12,11 @@
     </select>
 
     <insert id="insertUser" parameterType="com.example.api.dto.User">
-        INSERT INTO users (name, email,id, password, sns)
+        INSERT INTO info (name, email,id, password, sns)
         VALUES (#{name}, #{email}, #{id}, #{password}, #{sns})
     </insert>
 
-    <select id="findUserById" parameterType="java.util.Map" resultType="com.example.api.dto.User">
-        SELECT * FROM info WHERE id = #{id}
+    <select id="findUserByIdAndPassword" parameterType="java.util.Map" resultType="com.example.api.dto.User">
+        SELECT * FROM info WHERE id = #{id} AND password = #{password} LIMIT 1
     </select>
 </mapper>
