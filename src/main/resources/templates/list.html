@@ -19,8 +19,6 @@
         if (user&& token) {
             document.getElementById('result').textContent = `Name: ${user.name}, Email: ${user.email}`;
 
-        } else {
-            window.location.href = '/login';
         }
     });
 </script>
@@ -39,8 +37,15 @@
 <script>
     async function fetchJobById() {
         try {
+            const token = localStorage.getItem('token'); // localStorage에서 토큰을 가져옴
+
             const jobId = document.getElementById('jobIdInput').value; // 입력된 아이디 값 가져오기
-            const response = await fetch(`http://localhost:8080/api/jobs/listId?id=${jobId}`);
+            const response = await fetch(`http://localhost:8080/api/jobs/listId?id=${jobId}`,{
+                    method:'GET',
+                    headers:{
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -78,6 +83,7 @@
             const token = localStorage.getItem('token'); // 토큰 가져오기
 
             const response = await fetch('http://localhost:8080/api/jobs/listAll',{
+                method: 'GET',
                 headers:{
                     'Authorization': `Bearer ${token}`
                 }
