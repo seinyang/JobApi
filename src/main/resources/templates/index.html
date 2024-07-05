@@ -27,7 +27,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/jobs/login', {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,9 +38,11 @@
 
             if (response.ok) {
 
-                const { token } = await response.json();
+                const { token,user } = await response.json();
+                localStorage.setItem('user', JSON.stringify(user));
                 // JWT 토큰을 클라이언트의 쿠키에 저장
                 document.cookie = `jwtToken=${token}; Path=/`;
+                localStorage.setItem('token', token);
                 // 로그인 성공 후 리스트 페이지로 리다이렉션
                 window.location.href = '/list';
             } else {

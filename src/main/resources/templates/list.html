@@ -19,10 +19,11 @@
         if (user&& token) {
             document.getElementById('result').textContent = `Name: ${user.name}, Email: ${user.email}`;
 
+        } else {
+            window.location.href = '/login';
         }
     });
 </script>
-
 <h1>Job List by ID</h1>
 <label for="jobIdInput">Enter Job ID:</label>
 <input type="number" id="jobIdInput" name="jobId">
